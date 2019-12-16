@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [app.db]
             [app.nav.views.nav :refer [nav]]
+            [app.nav.events]
             [app.theme :refer [cheffy-theme]]
             ["@smooth-ui/core-sc" :refer [ThemeProvider Normalize Button]]))
 
@@ -15,7 +16,7 @@
 
 (defn ^:dev/after-load start
   []
-  (rf/dispatch [:initialize-db])
+  (rf/dispatch-sync [:initialize-db])
   (r/render [app]
             (.getElementById js/document "app")))
 

@@ -2,9 +2,10 @@
   (:require ["@smooth-ui/core-sc" :refer [Box]]
             [reagent.core :as r]))
 
-(defn nav-item [{:keys [id href name]}]
-  [(r/adapt-react-class Box) {:key  id
-                              :as   "a"
-                              :href href
-                              :ml   2
-                              :pb   10} name])
+(defn nav-item [{:keys [id href name dispatch]}]
+  [(r/adapt-react-class Box) {:key      id
+                              :as       "a"
+                              :href     href
+                              :on-click dispatch
+                              :ml       2
+                              :pb       10} name])
