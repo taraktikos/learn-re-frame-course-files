@@ -9,6 +9,8 @@
             [app.become-a-chef.views.become-a-chef :refer [become-a-chef]]
             [app.inbox.views.inboxes :refer [inboxes]]
             [app.auth.views.profile :refer [profile]]
+            [app.auth.views.log-in :refer [log-in]]
+            [app.auth.views.sign-up :refer [sign-up]]
             [app.theme :refer [cheffy-theme]]
             ["@smooth-ui/core-sc" :refer [ThemeProvider Normalize Grid Row Col]]))
 
@@ -19,6 +21,8 @@
     :become-a-chef [become-a-chef]
     :inbox         [inboxes]
     :recipes       [recipes]
+    :log-in        [log-in]
+    :sign-up       [sign-up]
     [recipes]))
 
 (defn app
