@@ -39,12 +39,12 @@
 
 (defn ^:dev/after-load start
   []
-  (rf/dispatch-sync [:initialize-db])
   (r/render [app]
             (.getElementById js/document "app")))
 
 (defn ^:export init
   []
+  (rf/dispatch-sync [:initialize-db])
   (start))
 
 (js/console.log {:test 2})
