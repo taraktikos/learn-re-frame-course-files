@@ -27,4 +27,4 @@
           [:a {:href     "#sign-up"
                :on-click #(rf/dispatch [:set-active-nav :sign-up])} "Create an account"]]
          [:> Box
-          [:> Button {:on-click #(js/console.log "log in")} "Log in"]]]]])))
+          [:> Button {:on-click #(rf/dispatch [:log-in @values])} "Log in"]]]]])))
