@@ -9,6 +9,7 @@
             [app.become-a-chef.views.become-a-chef :refer [become-a-chef]]
             [app.inbox.views.inboxes :refer [inboxes]]
             [app.auth.events]
+            [app.auth.subs]
             [app.auth.views.profile :refer [profile]]
             [app.auth.views.log-in :refer [log-in]]
             [app.auth.views.sign-up :refer [sign-up]]
