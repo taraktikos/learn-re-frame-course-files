@@ -1,25 +1,26 @@
 (ns app.nav.views.public
-  (:require ["@smooth-ui/core-sc" :refer [Box]]
-            [re-frame.core :as rf]
-            [app.nav.views.nav-item :refer [nav-item]]))
+  (:require [re-frame.core :as rf]
+            [app.router :as router]
+            [app.nav.views.nav-item :refer [nav-item]]
+            ["@smooth-ui/core-sc" :refer [Box]]))
 
 (defn public []
   (let [active-nav @(rf/subscribe [:active-nav])
         nav-items  [{:id       :recipes
                      :name     "Recipes"
-                     :href     "#recipes"
+                     :href     (router/path-for :recipes)
                      :dispatch #(rf/dispatch [:set-active-nav :recipes])}
                     {:id       :become-a-chef
                      :name     "Chef"
-                     :href     "#become-a-chef"
+                     :href     (router/path-for :become-a-chef)
                      :dispatch #(rf/dispatch [:set-active-nav :become-a-chef])}
                     {:id       :sign-up
                      :name     "Sign up"
-                     :href     "#sign-up"
+                     :href     (router/path-for :sign-up)
                      :dispatch #(rf/dispatch [:set-active-nav :sign-up])}
                     {:id       :log-in
                      :name     "Log in"
-                     :href     "#log-in"
+                     :href     (router/path-for :log-in)
                      :dispatch #(rf/dispatch [:set-active-nav :log-in])}]]
     [:> Box {:display         "flex"
              :justify-content "flex-end"
