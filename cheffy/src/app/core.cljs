@@ -50,5 +50,3 @@
   (router/start!)
   (rf/dispatch-sync [:initialize-db])
   (start))
-
-(js/console.log {:test 2})

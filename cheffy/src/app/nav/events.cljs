@@ -10,9 +10,9 @@
 (reg-event-db
   :route-changed
   (fn [db [_ {:keys [handler]}]]
-    (assoc-in db [:nav :active-page] handler))
+    (assoc-in db [:nav :active-page] handler)))
 
-  (reg-event-db
-    :set-active-nav ;; (rf/dispatch [:set-active-nav :saved])
-    (fn [db [_ active-nav]]
-      (assoc-in db [:nav :active-nav] active-nav))))
+(reg-event-db
+  :set-active-nav
+  (fn [db [_ active-nav]]
+    (assoc-in db [:nav :active-nav] active-nav)))
