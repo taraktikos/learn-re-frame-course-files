@@ -5,6 +5,9 @@
 
 (defn nav []
   (let [logged-in? @(rf/subscribe [:logged-in?])]
-    (if logged-in?
-      [authenticated]
-      [public])))
+    [:<>
+     (if logged-in?
+       [authenticated]
+       [public])
+     ;; [:pre (with-out-str (cljs.pprint/pprint (get-in @re-frame.db/app-db [:nav])))]
+     ]))
