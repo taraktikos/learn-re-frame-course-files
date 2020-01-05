@@ -22,16 +22,17 @@
   :sign-up
   set-user-interceptors
   (fn [{:keys [db]} [_ {:keys [first-name last-name email password]}]]
-    {:db       (-> db
-                   (assoc-in [:auth :uid] email)
-                   (assoc-in [:users email] {:uid     email
-                                             :profile {:first-name first-name
-                                                       :last-name  last-name
-                                                       :email      email
-                                                       :password   password}
-                                             :saved   #{}
-                                             :inboxes {}}))
-     :dispatch [:set-active-nav :saved]}))
+    {:db          (-> db
+                      (assoc-in [:auth :uid] email)
+                      (assoc-in [:users email] {:uid     email
+                                                :profile {:first-name first-name
+                                                          :last-name  last-name
+                                                          :email      email
+                                                          :password   password}
+                                                :saved   #{}
+                                                :inboxes {}}))
+     :dispatch    [:set-active-nav :saved]
+     :navigate-to {:path "/saved"}}))
 
 (reg-event-fx
   :log-in
@@ -42,17 +43,19 @@
       (cond
         (not user)              {:db (assoc-in db [:errors :email] "User not found")}
         (not correct-password?) {:db (assoc-in db [:errors :email] "Wrong password")}
-        correct-password?       {:db       (-> db
-                                               (assoc-in [:auth :uid] email)
-                                               (update-in [:errors] dissoc :email))
-                                 :dispatch [:set-active-nav :saved]}))))
+        correct-password?       {:db          (-> db
+                                                  (assoc-in [:auth :uid] email)
+                                                  (update-in [:errors] dissoc :email))
+                                 :dispatch    [:set-active-nav :saved]
+                                 :navigate-to {:path "/saved"}}))))
 
 (reg-event-fx
   :log-out
   remove-user-interceptors
   (fn [{:keys [db]} _]
-    {:db       (assoc-in db [:auth :uid] nil)
-     :dispatch [:set-active-nav :recipes]}))
+    {:db          (assoc-in db [:auth :uid] nil)
+     :dispatch    [:set-active-nav :recipes]
+     :navigate-to {:path "/recipes"}}))
 
 (reg-event-db
   :update-profile
@@ -65,7 +68,8 @@
   remove-user-interceptors
   (fn [{:keys [db]} _]
     (let [uid (get-in db [:auth :uid])]
-      {:db       (-> db
-                     (assoc-in [:auth :uid] nil)
-                     (update-in [:users] dissoc uid))
-       :dispatch [:set-active-nav :recipes]})))
+      {:db          (-> db
+                        (assoc-in [:auth :uid] nil)
+                        (update-in [:users] dissoc uid))
+       :dispatch    [:set-active-nav :recipes]
+       :navigate-to {:path "/recipes"}})))
