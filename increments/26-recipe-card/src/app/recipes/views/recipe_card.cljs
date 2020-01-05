@@ -4,7 +4,7 @@
             ["styled-icons/fa-solid/Heart" :refer [Heart]]
             ["styled-icons/fa-regular/Clock" :refer [Clock]]))
 
-(defn recipe-card
+(defn recqipe-card
   [{:keys [name saved-count prep-time img id]}]
   [:> Box {:as "a"
            :href (router/path-for :recipes)
