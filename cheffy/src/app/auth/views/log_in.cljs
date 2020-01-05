@@ -1,9 +1,10 @@
 (ns app.auth.views.log-in
   (:require [reagent.core :as r]
+            [re-frame.core :as rf]
+            [app.router :as router]
             [app.components.page-nav :refer [page-nav]]
             [app.components.form-group :refer [form-group]]
-            [re-frame.core :as rf]
-            ["@smooth-ui/core-sc" :refer [Box Button Row Col FormGroup Label Input]]))
+            ["@smooth-ui/core-sc" :refer [Box Button Row Col]]))
 
 (defn log-in []
   (let [initial-values {:email "" :password ""}
@@ -24,7 +25,7 @@
                  :justify-content "space-between"}
          [:> Box {:py 1
                   :pr 2}
-          [:a {:href     "#sign-up"
+          [:a {:href     (router/path-for :sign-up)
                :on-click #(rf/dispatch [:set-active-nav :sign-up])} "Create an account"]]
          [:> Box
           [:> Button {:on-click #(rf/dispatch [:log-in @values])} "Log in"]]]]])))

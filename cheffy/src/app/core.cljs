@@ -3,17 +3,23 @@
             [re-frame.core :as rf]
             [app.db]
             [app.router :as router]
-            [app.nav.views.nav :refer [nav]]
-            [app.nav.events]
-            [app.nav.subs]
-            [app.recipes.views.recipes :refer [recipes]]
-            [app.become-a-chef.views.become-a-chef :refer [become-a-chef]]
-            [app.inbox.views.inboxes :refer [inboxes]]
+            ;; auth
             [app.auth.events]
             [app.auth.subs]
             [app.auth.views.profile :refer [profile]]
             [app.auth.views.log-in :refer [log-in]]
             [app.auth.views.sign-up :refer [sign-up]]
+            ;; become-a-chef
+            [app.become-a-chef.views.become-a-chef :refer [become-a-chef]]
+            ;; inbox
+            [app.inbox.views.inboxes :refer [inboxes]]
+            ;; nav
+            [app.nav.views.nav :refer [nav]]
+            [app.nav.events]
+            [app.nav.subs]
+            ;; recipes
+            [app.recipes.views.recipes-page :refer [recipes-page]]
+            [app.recipes.subs]
             [app.theme :refer [cheffy-theme]]
             ["@smooth-ui/core-sc" :refer [ThemeProvider Normalize Grid Row Col]]))
 
@@ -23,14 +29,14 @@
     :profile       [profile]
     :become-a-chef [become-a-chef]
     :inbox         [inboxes]
-    :recipes       [recipes]
     :log-in        [log-in]
     :sign-up       [sign-up]
-    [recipes]))
+    :recipes       [recipes-page]
+    [recipes-page]))
 
 (defn app
   []
-  (let [active-nav @(rf/subscribe [:active-nav])]
+  (let [active-page @(rf/subscribe [:active-page])]
     [:<>
      [:> Normalize]
      [:> ThemeProvider {:theme cheffy-theme}
@@ -38,7 +44,7 @@
        [:> Row
         [:> Col
          [nav]
-         [pages active-nav]]]]]]))
+         [pages active-page]]]]]]))
 
 (defn ^:dev/after-load start
   []

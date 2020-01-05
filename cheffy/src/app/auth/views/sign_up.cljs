@@ -1,8 +1,9 @@
 (ns app.auth.views.sign-up
   (:require [reagent.core :as r]
+            [re-frame.core :as rf]
+            [app.router :as router]
             [app.components.page-nav :refer [page-nav]]
             [app.components.form-group :refer [form-group]]
-            [re-frame.core :as rf]
             ["@smooth-ui/core-sc" :refer [Box Button Row Col]]))
 
 (defn sign-up []
@@ -32,7 +33,7 @@
                  :justify-content "space-between"}
          [:> Box {:py 1
                   :pr 2}
-          [:a {:href     "#log-in"
-               :on-click #(rf/dispatch [:set-active-nav :log-in])} "Log in"]]
+          [:a {:href     (router/path-for :log-in)
+               :on-click #(rf/dispatch [:set-active-page :log-in])} "Log in"]]
          [:> Box
           [:> Button {:on-click #(rf/dispatch [:sign-up @values])} "Sign up"]]]]])))
