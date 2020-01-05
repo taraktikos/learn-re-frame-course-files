@@ -19,6 +19,7 @@
             [app.nav.subs]
             ;; recipes
             [app.recipes.views.recipes-page :refer [recipes-page]]
+            [app.recipes.views.recipe-page :refer [recipe-page]]
             [app.recipes.subs]
             [app.theme :refer [cheffy-theme]]
             ["@smooth-ui/core-sc" :refer [ThemeProvider Normalize Grid Row Col]]))
@@ -32,6 +33,7 @@
     :log-in        [log-in]
     :sign-up       [sign-up]
     :recipes       [recipes-page]
+    :recipe        [recipe-page]
     [recipes-page]))
 
 (defn app
