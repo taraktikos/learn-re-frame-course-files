@@ -1,9 +1,9 @@
 (ns app.recipes.views.recipe-image
-  (:require [re-frame.core :as rf]
-            [reagent.core :as r]
-            [app.components.form-group :refer [form-group]]
-            ["@smooth-ui/core-sc" :refer [Box Button Typography
-                                          Modal ModalContent ModalDialog ModalBody ModalFooter]]))
+    (:require [re-frame.core :as rf]
+              [reagent.core :as r]
+              [app.components.form-group :refer [form-group]]
+              ["@smooth-ui/core-sc" :refer [Box Button Typography
+                                            Modal ModalContent ModalDialog ModalBody ModalFooter]]))
 
 (defn recipe-image
   []
