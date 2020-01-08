@@ -17,6 +17,13 @@
        :dispatch [:close-modal]})))
 
 (reg-event-fx
+  :delete-step
+  (fn [{:keys [db]} [_ step-id]]
+    (let [recipe-id (get-in db [:nav :active-recipe])]
+      {:db       (update-in db [:recipes recipe-id :steps] dissoc step-id)
+       :dispatch [:close-modal]})))
+
+(reg-event-fx
   :upsert-ingredient
   (fn [{:keys [db]} [_ {:keys [id name amount measure]}]]
     (let [recipe-id   (get-in db [:nav :active-recipe])
@@ -28,4 +35,16 @@
                                                                     :name    name
                                                                     :amount  amount
                                                                     :measure measure})
+       :dispatch [:close-modal]})))
+
+(reg-event-fx
+  :upsert-step
+  (fn [{:keys [db]} [_ {:keys [id desc]}]]
+    (let [recipe-id (get-in db [:nav :active-recipe])
+          steps     (get-in db [:recipes recipe-id :steps])
+          order     (or (get-in steps [id :order])
+                        (inc (count steps)))]
+      {:db       (assoc-in db [:recipes recipe-id :steps id] {:id    id
+                                                              :order order
+                                                              :desc  desc})
        :dispatch [:close-modal]})))
