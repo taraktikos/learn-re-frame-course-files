@@ -10,6 +10,7 @@
             [app.auth.views.log-in :refer [log-in]]
             [app.auth.views.sign-up :refer [sign-up]]
             ;; become-a-chef
+            [app.become-a-chef.events]
             [app.become-a-chef.views.become-a-chef :refer [become-a-chef]]
             ;; inbox
             [app.inbox.views.inboxes :refer [inboxes]]
