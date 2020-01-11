@@ -22,4 +22,4 @@
   :chef?
   (fn [db _]
     (let [uid (get-in db [:auth :uid])]
-      (= (get-in db [:users uid]) :chef))))
+      (= (get-in db [:users uid :role]) :chef))))

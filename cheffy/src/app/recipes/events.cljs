@@ -70,3 +70,18 @@
        :dispatch-n  [[:set-active-nav :recipes]
                      [:set-active-page :recipes]]
        :navigate-to {:path "/recipes/"}})))
+
+(reg-event-fx
+  :publish-recipe
+  (fn [{:keys [db]} [_ {:keys [price]}]]
+    (let [recipe-id (get-in db [:nav :active-recipe])]
+      {:db       (update-in db [:recipes recipe-id] merge {:price   price
+                                                           :public? true})
+       :dispatch [:close-modal]})))
+
+(reg-event-fx
+  :unpublish-recipe
+  (fn [{:keys [db]} _]
+    (let [recipe-id (get-in db [:nav :active-recipe])]
+      {:db       (assoc-in db [:recipes recipe-id :public?] false)
+       :dispatch [:close-modal]})))

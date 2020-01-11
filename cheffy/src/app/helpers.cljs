@@ -11,8 +11,8 @@
                {:name "week" :limit 2629743 :in-second 604800}
                {:name "month" :limit 31556926 :in-second 2629743}
                {:name "year" :limit js/Number.MAX_VALUE :in-second 31556926}]
-        time (js/Date. timestamp)
-        diff (t/in-seconds (t/interval time (t/now)))]
+        time  (js/Date. timestamp)
+        diff  (t/in-seconds (t/interval time (t/now)))]
     (if (< diff 5)
       "just now"
       (let [unit (first (drop-while #(or (>= diff (:limit %))
@@ -22,3 +22,7 @@
             Math/floor
             int
             (#(str % " " (:name unit) (when (> % 1) "s") " ago")))))))
+
+(defn format-price
+  [cents]
+  (str (/ (js/parseInt cents) 100) " €"))
