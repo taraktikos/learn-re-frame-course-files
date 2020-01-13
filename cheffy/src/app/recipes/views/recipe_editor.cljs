@@ -14,7 +14,8 @@
         open-modal     (fn [{:keys [modal-name recipe]}]
                          (rf/dispatch [:open-modal modal-name])
                          (reset! values recipe))
-        save           (fn [{:keys [name prep-time]}]
+        save           (fn [event {:keys [name prep-time]}]
+                         (.preventDefault event)
                          (rf/dispatch [:upsert-recipe {:name      (str/trim name)
                                                        :prep-time (js/parseInt prep-time)}])
                          (reset! values initial-values))]
@@ -36,17 +37,22 @@
             [:> Plus {:size 16}]])
          [modal {:modal-name :recipe-editor
                  :header     "Recipe"
-                 :body       [:> Row
-                              [:> Col
-                               [form-group {:id     :name
-                                            :label  "Name"
-                                            :type   "text"
-                                            :values values}]]
-                              [:> Col {:xs 4}
-                               [form-group {:id     :prep-time
-                                            :label  "Cooking time"
-                                            :type   "number"
-                                            :values values}]]]
+                 :body       [:form {:on-submit #(save % @values)}
+                              [:> Row
+                               [:> Col
+                                [form-group {:id          :name
+                                             :label       "Name"
+                                             :type        "text"
+                                             :values      values
+                                             :on-key-down #(when (= (.-which %) 13)
+                                                             (save % @values))}]]
+                               [:> Col {:xs 4}
+                                [form-group {:id          :prep-time
+                                             :label       "Cooking time"
+                                             :type        "number"
+                                             :values      values
+                                             :on-key-down #(when (= (.-which %) 13)
+                                                             (save % @values))}]]]]
                  :footer     [:<>
                               (when name
                                 [:a {:href     "#"
@@ -56,5 +62,5 @@
                               [:> Button {:variant  "light"
                                           :on-click #(rf/dispatch [:close-modal])}
                                "Cancel"]
-                              [:> Button {:on-click #(save @values)}
+                              [:> Button {:on-click #(save % @values)}
                                "Save"]]}]]))))

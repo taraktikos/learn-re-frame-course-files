@@ -14,7 +14,8 @@
         open-modal     (fn [{:keys [modal-name ingredient]}]
                          (rf/dispatch [:open-modal modal-name])
                          (reset! values ingredient))
-        save           (fn [{:keys [id amount measure name]}]
+        save           (fn [event {:keys [id amount measure name]}]
+                         (.preventDefault event)
                          (rf/dispatch [:upsert-ingredient {:id      (or id (keyword (str "ingredient-" (random-uuid))))
                                                            :name    (str/trim name)
                                                            :amount  (js/parseInt amount)
@@ -53,7 +54,7 @@
           (when author?
             [modal {:modal-name :ingredient-editor
                     :header     "Ingredient"
-                    :body       [:<>
+                    :body       [:form {:on-submit #(save % @values)}
                                  [:> Row
                                   [:> Col
                                    [form-group {:id     :amount
@@ -65,10 +66,12 @@
                                                 :label  "Measure"
                                                 :type   "text"
                                                 :values values}]]]
-                                 [form-group {:id     :name
-                                              :label  "Name"
-                                              :type   "text"
-                                              :values values}]]
+                                 [form-group {:id          :name
+                                              :label       "Name"
+                                              :type        "text"
+                                              :values      values
+                                              :on-key-down #(when (= (.-which %) 13)
+                                                              (save % @values))}]]
                     :footer     [:<>
                                  (when-let [ingredient-id (:id @values)]
                                    [:a {:href     "#"
@@ -79,5 +82,5 @@
                                              :mx       10
                                              :on-click #(rf/dispatch [:close-modal])}
                                   "Cancel"]
-                                 [:> Button {:on-click #(save @values)}
+                                 [:> Button {:on-click #(save % @values)}
                                   "Save"]]}])]]))))

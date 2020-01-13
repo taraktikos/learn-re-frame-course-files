@@ -1,7 +1,7 @@
 (ns app.components.form-group
   (:require ["@smooth-ui/core-sc" :refer [FormGroup Label Input Textarea]]))
 
-(defn form-group [{:keys [id label type values textarea]}]
+(defn form-group [{:keys [id label type values textarea on-key-down]}]
   [:> FormGroup
    [:> Label {:html-for id} label]
    (if textarea
@@ -11,8 +11,9 @@
                    :type      type
                    :value     (id @values)
                    :on-change #(swap! values assoc id (.. % -target -value))}]
-     [:> Input {:id        id
-                :control   true
-                :type      type
-                :value     (id @values)
-                :on-change #(swap! values assoc id (.. % -target -value))}])])
+     [:> Input {:id          id
+                :control     true
+                :type        type
+                :value       (id @values)
+                :on-change   #(swap! values assoc id (.. % -target -value))
+                :on-key-down on-key-down}])])
