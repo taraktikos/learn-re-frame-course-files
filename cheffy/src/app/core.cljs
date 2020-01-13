@@ -14,6 +14,7 @@
             [app.become-a-chef.views.become-a-chef :refer [become-a-chef]]
             ;; inbox
             [app.inbox.views.inboxes-page :refer [inboxes-page]]
+            [app.inbox.views.inbox-page :refer [inbox-page]]
             [app.inbox.subs]
             [app.inbox.events]
             ;; nav
@@ -34,6 +35,7 @@
   (case page-name
     :profile       [profile]
     :become-a-chef [become-a-chef]
+    :inbox         [inbox-page]
     :inboxes       [inboxes-page]
     :log-in        [log-in]
     :sign-up       [sign-up]
