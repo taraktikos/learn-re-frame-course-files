@@ -15,10 +15,10 @@
                       :name     "Recipes"
                       :href     (router/path-for :recipes)
                       :dispatch #(rf/dispatch [:set-active-nav :recipes])}
-                     {:id       :inbox
+                     {:id       :inboxes
                       :name     "Inbox"
                       :href     (router/path-for :inboxes)
-                      :dispatch #(rf/dispatch [:set-active-nav :inbox])}
+                      :dispatch #(rf/dispatch [:set-active-nav :inboxes])}
                      {:id       :become-a-chef
                       :name     "Chef"
                       :href     (router/path-for :become-a-chef)
