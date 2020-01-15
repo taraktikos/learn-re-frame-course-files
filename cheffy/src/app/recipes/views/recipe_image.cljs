@@ -1,6 +1,7 @@
 (ns app.recipes.views.recipe-image
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
+            [clojure.string :as str]
             [app.components.form-group :refer [form-group]]
             [app.components.modal :refer [modal]]
             ["@smooth-ui/core-sc" :refer [Box Button]]))
@@ -13,10 +14,11 @@
         open-modal     (fn [{:keys [modal-name recipe]}]
                          (rf/dispatch [:open-modal modal-name])
                          (reset! values recipe))
-        save           (fn [event img]
+        save           (fn [event {:keys [img]}]
                          (.preventDefault event)
-                         (rf/dispatch [:upsert-image img])
-                         (reset! values initial-values))]
+                         (when (not (str/blank? img))
+                           (rf/dispatch [:upsert-image img])
+                           (reset! values initial-values)))]
     (fn []
       (let [{:keys [img name]} @(rf/subscribe [:recipe])]
         [:<>
