@@ -3,7 +3,7 @@
             [app.components.page-nav :refer [page-nav]]
             [app.recipes.views.recipe-list :refer [recipe-list]]
             [app.recipes.views.recipe-editor :refer [recipe-editor]]
-            ["@smooth-ui/core-sc" :refer [Typography]]))
+            ["@smooth-ui/core-sc" :refer [Typography Button]]))
 
 (defn recipes-page []
   (let [public     @(rf/subscribe [:public])
@@ -12,6 +12,7 @@
     [:<>
      [page-nav {:center "Recipes"
                 :right  (when logged-in? [recipe-editor])}]
+     [:> Button {:on-click #(rf/dispatch [:get-recipes])} "get recipes"]
      (when (seq drafts)
        [:> Typography {:variant     "h4"
                        :py          20
