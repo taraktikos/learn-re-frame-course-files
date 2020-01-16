@@ -1,36 +1,48 @@
 (ns app.nav.events
-  (:require [re-frame.core :refer [reg-event-db reg-fx]]
+  (:require [re-frame.core :refer [reg-event-db reg-event-fx reg-fx path]]
             [app.router :as router]))
+
+(def nav-interceptors [(path :nav)])
 
 (reg-fx
   :navigate-to
   (fn [{:keys [path]}]
     (router/set-token! path)))
 
-(reg-event-db
+(reg-event-fx
   :route-changed
-  (fn [db [_ {:keys [handler route-params]}]]
-    (-> db
-        (assoc-in [:nav :active-page] handler)
-        (assoc-in [:nav :active-recipe] (keyword (:recipe-id route-params)))
-        (assoc-in [:nav :active-inbox] (keyword (:inbox-id route-params))))))
+  nav-interceptors
+  (fn [{nav :db} [_ {:keys [handler route-params]}]]
+    (let [nav (assoc nav :active-page handler)
+          _   (js/console.log "route-changed event")]
+      (case handler
+        :recipes {:db       nav
+                  :dispatch [:get-recipes]}
+        :recipe  {:db       (assoc nav :active-recipe (keyword (:recipe-id route-params)))
+                  :dispatch [:get-recipes]}
+        :inbox   {:db (assoc nav :active-inbox (keyword (:inbox-id route-params)))}
+        {:db (dissoc nav :active-recipe :active-inbox)}))))
 
 (reg-event-db
   :set-active-nav
-  (fn [db [_ active-nav]]
-    (assoc-in db [:nav :active-nav] active-nav)))
+  nav-interceptors
+  (fn [nav [_ active-nav]]
+    (assoc nav :active-nav active-nav)))
 
 (reg-event-db
   :set-active-page
-  (fn [db [_ active-page]]
-    (assoc-in db [:nav :active-page] active-page)))
+  nav-interceptors
+  (fn [nav [_ active-page]]
+    (assoc nav :active-page active-page)))
 
 (reg-event-db
   :close-modal
-  (fn [db _]
-    (assoc-in db [:nav :active-modal] nil)))
+  nav-interceptors
+  (fn [nav _]
+    (assoc nav :active-modal nil)))
 
 (reg-event-db
   :open-modal
-  (fn [db [_ modal-name]]
-    (assoc-in db [:nav :active-modal] modal-name)))
+  nav-interceptors
+  (fn [nav [_ modal-name]]
+    (assoc nav :active-modal modal-name)))
