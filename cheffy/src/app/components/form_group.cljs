@@ -35,11 +35,12 @@
                   :control     true
                   :valid       valid
                   :on-blur     validate
-                  :rows        (when (= element Textarea) 6)
+                  :rows        (when textarea 6)
                   :type        type
                   :value       (id @values)
                   :on-change   #(swap! values assoc id (.. % -target -value))
-                  :on-key-down on-key-down}]
+                  :on-key-down on-key-down
+                  :on-key-up   (when-not (str/blank? (id @values)) validate)}]
      (when input-error
        [:> ControlFeedback {:valid false}
         input-error])]))
