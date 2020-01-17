@@ -14,11 +14,11 @@
 
 (s/def ::inboxes (s/map-of keyword? map?))
 
-(s/def ::nav (s/map-of keyword? keyword?))
+(s/def ::nav (s/map-of keyword? (s/nilable keyword?)))
 
 (s/def ::recipes (s/map-of keyword? map?))
 
-(s/def ::users (s/map-of keyword? map?))
+(s/def ::users (s/map-of string? map?))
 
 (s/def ::db (s/keys :req-un [::auth ::errors ::inboxes ::nav ::recipes ::users]))
 

@@ -1,9 +1,11 @@
 (ns app.nav.events
   (:require [re-frame.core :refer [reg-event-db reg-event-fx reg-fx path]]
             [app.router :as router]
-            [app.helpers :as h]))
+            [app.helpers :as h]
+            [app.spec :refer [check-spec-interceptor]]))
 
-(def nav-interceptors [(path :nav)])
+(def nav-interceptors [check-spec-interceptor
+                       (path :nav)])
 
 (reg-fx
   :navigate-to
