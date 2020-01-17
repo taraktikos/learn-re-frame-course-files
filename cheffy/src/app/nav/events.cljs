@@ -1,6 +1,7 @@
 (ns app.nav.events
   (:require [re-frame.core :refer [reg-event-db reg-event-fx reg-fx path]]
-            [app.router :as router]))
+            [app.router :as router]
+            [app.helpers :as h]))
 
 (def nav-interceptors [(path :nav)])
 
@@ -37,9 +38,8 @@
 
 (reg-event-db
   :close-modal
-  nav-interceptors
-  (fn [nav _]
-    (assoc nav :active-modal nil)))
+  (fn [db _]
+    (h/close-modal db)))
 
 (reg-event-db
   :open-modal

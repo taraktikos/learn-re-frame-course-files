@@ -2,7 +2,8 @@
   (:require [re-frame.core :refer [reg-event-db reg-event-fx]]
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
-            [clojure.walk :as w]))
+            [clojure.walk :as w]
+            [app.helpers :as h]))
 
 (def recipes-endpoint "https://gist.githubusercontent.com/jacekschae/50ffe6e8851a5dfe35e932682ca32d85/raw/06e8041d0abf86e2c5d809a334cf8f18d3d6303b/recipes.json")
 
@@ -48,58 +49,63 @@
           (update-in [:users uid :saved] conj recipe-id)
           (update-in [:recipes recipe-id :saved-count] inc)))))
 
-(reg-event-fx
+(reg-event-db
   :delete-ingredient
-  (fn [{:keys [db]} [_ ingredient-id]]
+  (fn [db [_ ingredient-id]]
     (let [recipe-id (get-in db [:nav :active-recipe])]
-      {:db       (update-in db [:recipes recipe-id :ingredients] dissoc ingredient-id)
-       :dispatch [:close-modal]})))
+      (-> db
+          (update-in [:recipes recipe-id :ingredients] dissoc ingredient-id)
+          (h/close-modal)))))
 
-(reg-event-fx
+(reg-event-db
   :delete-step
-  (fn [{:keys [db]} [_ step-id]]
+  (fn [db [_ step-id]]
     (let [recipe-id (get-in db [:nav :active-recipe])]
-      {:db       (update-in db [:recipes recipe-id :steps] dissoc step-id)
-       :dispatch [:close-modal]})))
+      (-> db
+          (update-in [:recipes recipe-id :steps] dissoc step-id)
+          (h/close-modal)))))
 
-(reg-event-fx
+(reg-event-db
   :upsert-ingredient
-  (fn [{:keys [db]} [_ {:keys [id name amount measure]}]]
+  (fn [db [_ {:keys [id name amount measure]}]]
     (let [recipe-id   (get-in db [:nav :active-recipe])
           ingredients (get-in db [:recipes recipe-id :ingredients])
           order       (or (get-in ingredients [id :order])
                           (inc (count ingredients)))]
-      {:db       (assoc-in db [:recipes recipe-id :ingredients id] {:id      id
-                                                                    :order   order
-                                                                    :name    name
-                                                                    :amount  amount
-                                                                    :measure measure})
-       :dispatch [:close-modal]})))
+      (-> db
+          (assoc-in [:recipes recipe-id :ingredients id] {:id      id
+                                                          :order   order
+                                                          :name    name
+                                                          :amount  amount
+                                                          :measure measure})
+          (h/close-modal)))))
 
-(reg-event-fx
+(reg-event-db
   :upsert-step
-  (fn [{:keys [db]} [_ {:keys [id desc]}]]
+  (fn [db [_ {:keys [id desc]}]]
     (let [recipe-id (get-in db [:nav :active-recipe])
           steps     (get-in db [:recipes recipe-id :steps])
           order     (or (get-in steps [id :order])
                         (inc (count steps)))]
-      {:db       (assoc-in db [:recipes recipe-id :steps id] {:id    id
-                                                              :order order
-                                                              :desc  desc})
-       :dispatch [:close-modal]})))
+      (-> db
+          (assoc-in [:recipes recipe-id :steps id] {:id    id
+                                                    :order order
+                                                    :desc  desc})
+          (h/close-modal)))))
 
-(reg-event-fx
+(reg-event-db
   :upsert-recipe
-  (fn [{:keys [db]} [_ {:keys [name prep-time]}]]
+  (fn [db [_ {:keys [name prep-time]}]]
     (let [recipe-id (get-in db [:nav :active-recipe])
           id        (or recipe-id (keyword (str "recipe-" (random-uuid))))
           uid       (get-in db [:auth :uid])]
-      {:db       (update-in db [:recipes id] merge {:id        id
-                                                    :name      name
-                                                    :prep-time prep-time
-                                                    :cook      uid
-                                                    :public?   false})
-       :dispatch [:close-modal]})))
+      (-> db
+          (update-in [:recipes id] merge {:id        id
+                                          :name      name
+                                          :prep-time prep-time
+                                          :cook      uid
+                                          :public?   false})
+          (h/close-modal)))))
 
 (reg-event-fx
   :delete-recipe
